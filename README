@@ -1,0 +1,90 @@
+Der Clou! - SDL Port v2.6
+=========================
+
+Original version by:
+	neo Software Produktions GmbH
+
+Port by:
+	Vasco Alexandre da Silva Costa <vasco.costa AT gmail.com>
+
+Thanks to:
+        Thomas Trummer <cosp AT antaresdesign.org>
+	  * for the HSC music code and valuable insight
+
+        Jens Granseuer <jensgr AT gmx.net>
+	  * for patches
+
+	Patrick Fehr
+	Felix Schwarz
+	  * for bug reports
+
+
+Please read the LICENSE file in this directory before proceeding.
+
+
+To compile:
+===========
+You need SDL installed. Type 'make' to compile.
+
+
+Instructions:
+=============
+
+To run the game type 'derclou'.
+
+Here is the command line usage:
+
+-------------------------------------------------------------------------------
+Syntax:
+        derclou [-h] [-d[<num>]] [-f] [-m<num>] [-s<num>]
+Flags:
+        -d[<num>]  - enable debug output (debug level [1])
+        -f         - fullscreen mode
+        -g<mode>   - graphics mode (normal,2x,linear2x)
+        -h         - show help
+        -m<num>    - set music volume to <num> (0-255)
+        -s<num>    - set sfx volume to <num> (0-255)
+        -t         - trainer
+-------------------------------------------------------------------------------
+
+
+Implementation:
+===============
+
+* The game autodetects the following data files:
+
+  a) Der Clou!
+  b) Der Clou! CD-ROM
+  c) Der Clou! Profidisk
+  d) Der Clou! Profidisk CD-ROM
+
+  PC version only.
+
+  It also autodetects the language: German/English/French/Spanish/Slovak.
+
+* The game tries to load the datafiles from the directory pointed by
+  the environment variable 'DERCLOU_ROOTDIR'.
+  Failing that it will try to load them from the current directory.
+
+  ('DERCLOU_ROOTDIR' seems busted. Please use the current directory for now.)
+
+  The free datafiles (German) can no longer be downloaded from the neo website.
+  The website has been down for some time. I put these files in a tarball here:
+  http://vasc.home.sapo.pt/theclue/
+
+  Just 'cd' into the created directory and run 'derclou' to play.
+
+* The English datafiles have not been released by neo Software since they
+  do not own the copyright for them. Not that you should have much trouble
+  finding them.
+
+
+Request:
+========
+
+If you like this software please contact neo Software Produktions GmbH and help
+me persuade them to re-release the source code under an actual open source
+license like the GNU GPL. Be nice to them.
+
+Enjoy!
+

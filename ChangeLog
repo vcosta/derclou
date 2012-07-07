@@ -1,0 +1,421 @@
+Sat, 16 Jun 2007 14:44:19 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/README
+
+	Bump up release to 2.6.
+
+Sat, 16 Jun 2007 14:43:04 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/README
+
+	Update README file.
+
+Sat, 16 Jun 2007 14:31:22 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/data/relation.c
+	   M /derclou/trunk/disk/disk.c
+	   M /derclou/trunk/disk/disk.h
+	   M /derclou/trunk/list/list.c
+	   M /derclou/trunk/planing/io.c
+	   M /derclou/trunk/planing/system.c
+
+	s/getline/dskGetLine/ so there is no name clash with a system library function.
+
+	Bug reported by Patrick Fehr.
+
+Sat, 20 Aug 2005 15:15:36 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/README
+
+	Bump up release to 2.5.
+
+Sat, 20 Aug 2005 15:14:22 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/data/dataappl.h
+	   M /derclou/trunk/data/datacalc.c
+	   M /derclou/trunk/data/datacalc.h
+	   M /derclou/trunk/scenes/cars.c
+	   M /derclou/trunk/story/story.c
+
+	Revert CalcValue and Round code to fix a time calculation bug.
+
+	Bug reported by Felix Schwarz.
+
+Sat, 20 Aug 2005 15:11:49 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/sound/fx.c
+
+	Replace strncmp with memcmp.
+
+Fri, 13 May 2005 18:40:11 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/README
+
+	Bump up release to 2.4.
+
+Fri, 13 May 2005 18:39:38 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/README
+
+	Removed bug entry.
+
+Fri, 13 May 2005 18:38:08 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/gfx/gfx.c
+	   M /derclou/trunk/gfx/gfx.h
+	   M /derclou/trunk/inphdl/inphdl.c
+	   M /derclou/trunk/inphdl/inphdl.h
+	   M /derclou/trunk/present/interac.c
+	   M /derclou/trunk/present/present.c
+
+	Improved mouse control.
+
+Fri, 13 May 2005 14:48:12 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/sound/fx.c
+	   M /derclou/trunk/sound/hsc.c
+	   M /derclou/trunk/sound/hsc.h
+
+	Fix sound buffer bug.
+
+Fri, 13 May 2005 13:31:27 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/sound/fx.c
+
+	Add proper linear interpolation for sound fx rate conversion.
+
+Fri, 13 May 2005 11:38:28 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/sound/fx.c
+
+	Use standard style.
+
+Fri, 13 May 2005 11:23:52 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/README
+
+	Change my e-mail address.
+
+Fri, 13 May 2005 02:17:39 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/Makefile
+	   A /derclou/trunk/sound/buffer.c
+	   A /derclou/trunk/sound/buffer.h
+	   M /derclou/trunk/sound/fx.c
+	   M /derclou/trunk/sound/fx.h
+	   M /derclou/trunk/sound/hsc.c
+	   M /derclou/trunk/sound/hsc.h
+
+	Totally revamped and bugfixed sound mixing.
+
+	There are now two working sound channels: Sfx and Music.
+	Each sound channel has its own circular buffer.
+	Mixing is done with floating point precision.
+
+	Music should be properly sampled now.
+
+	Sound is still sampled wrong, but the sound loader code
+	has been totally revamped to be more robust.
+
+Thu, 12 May 2005 15:26:38 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/LICENSE
+	   M /derclou/trunk/README
+	   M /derclou/trunk/base/base.c
+
+	Remove dates.
+	Remove a blank newline in the about string.
+	Bump up release version to 2.3.
+
+Thu, 12 May 2005 15:22:26 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/base/base.c
+	   M /derclou/trunk/theclou.h
+
+	Cleanup language detection code.
+
+Thu, 12 May 2005 15:01:49 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/base/base.c
+	   M /derclou/trunk/disk/disk.c
+	   M /derclou/trunk/disk/disk.h
+	   M /derclou/trunk/gameplay/gp.c
+	   M /derclou/trunk/gameplay/loadsave.c
+	   M /derclou/trunk/gfx/gfx.c
+	   M /derclou/trunk/landscap/init.c
+	   M /derclou/trunk/landscap/spot.c
+	   M /derclou/trunk/living/living.c
+	   M /derclou/trunk/planing/guards.c
+	   M /derclou/trunk/planing/io.c
+	   M /derclou/trunk/planing/planer.c
+	   M /derclou/trunk/sound/fx.c
+	   M /derclou/trunk/sound/newsound.c
+	   M /derclou/trunk/text/text.c
+
+	Fix save pathname case sensitivity bug.
+
+	Patch by Jens Granseuer, with minor changes by me.
+
+Thu, 12 May 2005 14:15:34 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk
+	   M /derclou/trunk/Makefile
+	   M /derclou/trunk/base/base.c
+	   M /derclou/trunk/data/database.ph
+	   M /derclou/trunk/gfx/gfx.c
+	   M /derclou/trunk/landscap/landscap.ph
+	   M /derclou/trunk/living/living.ph
+	   M /derclou/trunk/present/interac.ph
+	   M /derclou/trunk/sound/hsc.c
+	   M /derclou/trunk/text/text.ph
+	   M /derclou/trunk/theclou.h
+
+	Port code from C99 to C89.
+
+Thu, 12 May 2005 14:11:42 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   A /derclou/trunk/.cvsignore
+
+	Ignore derclou binary.
+
+Thu, 12 May 2005 13:55:39 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   M /derclou/trunk/anim/sysanim.c
+	   M /derclou/trunk/base/base.c
+	   M /derclou/trunk/data/database.c
+	   M /derclou/trunk/data/database.h
+	   M /derclou/trunk/data/datacalc.c
+	   M /derclou/trunk/dialog/dialog.c
+	   M /derclou/trunk/disk/disk.c
+	   M /derclou/trunk/gameplay/gp.c
+	   M /derclou/trunk/gameplay/gp_app.c
+	   M /derclou/trunk/gameplay/tcreques.c
+	   M /derclou/trunk/gfx/gfx.c
+	   M /derclou/trunk/gfx/gfx.h
+	   M /derclou/trunk/gfx/gfxnch4.c
+	   M /derclou/trunk/gfx/gfxnch4.h
+	   M /derclou/trunk/inphdl/inphdl.c
+	   M /derclou/trunk/inphdl/inphdl.h
+	   M /derclou/trunk/landscap/access.c
+	   M /derclou/trunk/landscap/hardware.c
+	   M /derclou/trunk/landscap/init.c
+	   M /derclou/trunk/landscap/landscap.c
+	   M /derclou/trunk/landscap/landscap.h
+	   M /derclou/trunk/landscap/raster.c
+	   M /derclou/trunk/landscap/scroll.c
+	   M /derclou/trunk/landscap/spot.c
+	   M /derclou/trunk/list/list.c
+	   M /derclou/trunk/living/living.c
+	   M /derclou/trunk/living/living.h
+	   M /derclou/trunk/organisa/organisa.c
+	   M /derclou/trunk/planing/graphics.c
+	   M /derclou/trunk/planing/graphics.h
+	   M /derclou/trunk/planing/guards.c
+	   M /derclou/trunk/planing/guards.h
+	   M /derclou/trunk/planing/io.c
+	   M /derclou/trunk/planing/io.h
+	   M /derclou/trunk/planing/main.h
+	   M /derclou/trunk/planing/planer.c
+	   M /derclou/trunk/planing/player.c
+	   M /derclou/trunk/planing/prepare.c
+	   M /derclou/trunk/planing/prepare.h
+	   M /derclou/trunk/planing/support.c
+	   M /derclou/trunk/planing/support.h
+	   M /derclou/trunk/planing/sync.c
+	   M /derclou/trunk/planing/sync.h
+	   M /derclou/trunk/present/present.c
+	   M /derclou/trunk/scenes/cars.c
+	   M /derclou/trunk/scenes/inside.c
+	   M /derclou/trunk/sound/fmopl.c
+	   M /derclou/trunk/sound/hsc.c
+	   M /derclou/trunk/story/story.c
+	   M /derclou/trunk/story/story.h
+	   M /derclou/trunk/text/text.c
+	   M /derclou/trunk/text/text.h
+
+	Convert C99 like comments to C89.
+	Translate some comments into English.
+
+	Patch by Jens Granseuer.
+
+Thu, 05 May 2005 11:37:04 +0100  Vasco Alexandre da Silva Costa:
+
+	Changed paths:
+	   A /derclou
+	   A /derclou/branches
+	   A /derclou/tags
+	   A /derclou/trunk
+	   A /derclou/trunk/LICENSE
+	   A /derclou/trunk/Makefile
+	   A /derclou/trunk/README
+	   A /derclou/trunk/anim
+	   A /derclou/trunk/anim/sysanim.c
+	   A /derclou/trunk/anim/sysanim.h
+	   A /derclou/trunk/base
+	   A /derclou/trunk/base/Makefile
+	   A /derclou/trunk/base/base.c
+	   A /derclou/trunk/base/base.h
+	   A /derclou/trunk/cdrom
+	   A /derclou/trunk/cdrom/cdrom.c
+	   A /derclou/trunk/cdrom/cdrom.h
+	   A /derclou/trunk/data
+	   A /derclou/trunk/data/dataappl.c
+	   A /derclou/trunk/data/dataappl.h
+	   A /derclou/trunk/data/database.c
+	   A /derclou/trunk/data/database.h
+	   A /derclou/trunk/data/database.ph
+	   A /derclou/trunk/data/datacalc.c
+	   A /derclou/trunk/data/datacalc.h
+	   A /derclou/trunk/data/objstd
+	   A /derclou/trunk/data/objstd/tcdata.h
+	   A /derclou/trunk/data/objstd/tckeys.h
+	   A /derclou/trunk/data/relation.c
+	   A /derclou/trunk/data/relation.h
+	   A /derclou/trunk/dialog
+	   A /derclou/trunk/dialog/dialog.c
+	   A /derclou/trunk/dialog/dialog.h
+	   A /derclou/trunk/dialog/talk.c
+	   A /derclou/trunk/dialog/talkappl.c
+	   A /derclou/trunk/dialog/talkappl.h
+	   A /derclou/trunk/disk
+	   A /derclou/trunk/disk/disk.c
+	   A /derclou/trunk/disk/disk.eh
+	   A /derclou/trunk/disk/disk.h
+	   A /derclou/trunk/error
+	   A /derclou/trunk/error/error.c
+	   A /derclou/trunk/error/error.h
+	   A /derclou/trunk/gameplay
+	   A /derclou/trunk/gameplay/demo.c
+	   A /derclou/trunk/gameplay/gamefunc.h
+	   A /derclou/trunk/gameplay/gp.c
+	   A /derclou/trunk/gameplay/gp.h
+	   A /derclou/trunk/gameplay/gp_app.c
+	   A /derclou/trunk/gameplay/gp_app.h
+	   A /derclou/trunk/gameplay/loadsave.c
+	   A /derclou/trunk/gameplay/showthec.c
+	   A /derclou/trunk/gameplay/tcreques.c
+	   A /derclou/trunk/gfx
+	   A /derclou/trunk/gfx/gfx.c
+	   A /derclou/trunk/gfx/gfx.h
+	   A /derclou/trunk/gfx/gfx.ph
+	   A /derclou/trunk/gfx/gfxnch4.c
+	   A /derclou/trunk/gfx/gfxnch4.h
+	   A /derclou/trunk/indent.sh
+	   A /derclou/trunk/inphdl
+	   A /derclou/trunk/inphdl/inphdl.c
+	   A /derclou/trunk/inphdl/inphdl.h
+	   A /derclou/trunk/landscap
+	   A /derclou/trunk/landscap/access.c
+	   A /derclou/trunk/landscap/hardware.c
+	   A /derclou/trunk/landscap/init.c
+	   A /derclou/trunk/landscap/landscap.c
+	   A /derclou/trunk/landscap/landscap.h
+	   A /derclou/trunk/landscap/landscap.ph
+	   A /derclou/trunk/landscap/raster.c
+	   A /derclou/trunk/landscap/raster.h
+	   A /derclou/trunk/landscap/scroll.c
+	   A /derclou/trunk/landscap/spot.c
+	   A /derclou/trunk/landscap/spot.h
+	   A /derclou/trunk/list
+	   A /derclou/trunk/list/list.c
+	   A /derclou/trunk/list/list.h
+	   A /derclou/trunk/living
+	   A /derclou/trunk/living/bob.c
+	   A /derclou/trunk/living/bob.h
+	   A /derclou/trunk/living/living.c
+	   A /derclou/trunk/living/living.h
+	   A /derclou/trunk/living/living.ph
+	   A /derclou/trunk/mame.txt
+	   A /derclou/trunk/memory
+	   A /derclou/trunk/memory/memory.c
+	   A /derclou/trunk/memory/memory.h
+	   A /derclou/trunk/organisa
+	   A /derclou/trunk/organisa/display.c
+	   A /derclou/trunk/organisa/organisa.c
+	   A /derclou/trunk/organisa/organisa.h
+	   A /derclou/trunk/planing
+	   A /derclou/trunk/planing/graphics.c
+	   A /derclou/trunk/planing/graphics.h
+	   A /derclou/trunk/planing/guards.c
+	   A /derclou/trunk/planing/guards.h
+	   A /derclou/trunk/planing/io.c
+	   A /derclou/trunk/planing/io.h
+	   A /derclou/trunk/planing/main.c
+	   A /derclou/trunk/planing/main.h
+	   A /derclou/trunk/planing/planer.c
+	   A /derclou/trunk/planing/planer.h
+	   A /derclou/trunk/planing/player.c
+	   A /derclou/trunk/planing/player.h
+	   A /derclou/trunk/planing/prepare.c
+	   A /derclou/trunk/planing/prepare.h
+	   A /derclou/trunk/planing/support.c
+	   A /derclou/trunk/planing/support.h
+	   A /derclou/trunk/planing/sync.c
+	   A /derclou/trunk/planing/sync.h
+	   A /derclou/trunk/planing/system.c
+	   A /derclou/trunk/planing/system.h
+	   A /derclou/trunk/present
+	   A /derclou/trunk/present/interac.c
+	   A /derclou/trunk/present/interac.h
+	   A /derclou/trunk/present/interac.ph
+	   A /derclou/trunk/present/present.c
+	   A /derclou/trunk/present/present.h
+	   A /derclou/trunk/present/present.ph
+	   A /derclou/trunk/present/presenta.c
+	   A /derclou/trunk/publiclicencecontract.doc
+	   A /derclou/trunk/random
+	   A /derclou/trunk/random/random.c
+	   A /derclou/trunk/random/random.h
+	   A /derclou/trunk/replace.sh
+	   A /derclou/trunk/scenes
+	   A /derclou/trunk/scenes/cars.c
+	   A /derclou/trunk/scenes/dealer.c
+	   A /derclou/trunk/scenes/done.c
+	   A /derclou/trunk/scenes/evidence.c
+	   A /derclou/trunk/scenes/evidence.h
+	   A /derclou/trunk/scenes/inside.c
+	   A /derclou/trunk/scenes/invest.c
+	   A /derclou/trunk/scenes/scenes.c
+	   A /derclou/trunk/scenes/scenes.h
+	   A /derclou/trunk/scenes/tools.c
+	   A /derclou/trunk/sound
+	   A /derclou/trunk/sound/fmopl.c
+	   A /derclou/trunk/sound/fmopl.h
+	   A /derclou/trunk/sound/fx.c
+	   A /derclou/trunk/sound/fx.h
+	   A /derclou/trunk/sound/hsc.c
+	   A /derclou/trunk/sound/hsc.h
+	   A /derclou/trunk/sound/newsound.c
+	   A /derclou/trunk/sound/newsound.h
+	   A /derclou/trunk/story
+	   A /derclou/trunk/story/story.c
+	   A /derclou/trunk/story/story.h
+	   A /derclou/trunk/text
+	   A /derclou/trunk/text/text.c
+	   A /derclou/trunk/text/text.eh
+	   A /derclou/trunk/text/text.h
+	   A /derclou/trunk/text/text.ph
+	   A /derclou/trunk/theclou.h
+
+	Initial import of project derclou.
+
