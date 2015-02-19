@@ -405,11 +405,11 @@ static void hsc_process_row()
 #define HSC_BUFFER_SIZE		((unsigned)(SND_FREQUENCY / 18.2))
 
 /* Generic audio & audio mixing functions */
+S16 MusicStream[HSC_BUFFER_SIZE];
 void hscMusicPlayer(unsigned len)
 {
     if (OPL_Ok) {
 	if (sndLenBuffer(FXBase.pMusicBuffer) < len) {
-	    static S16 MusicStream[HSC_BUFFER_SIZE];
 
 	    hsc_process_row();
 	    YM3812UpdateOne(OPL_CHIP0, MusicStream, array_len(MusicStream));
