@@ -1,7 +1,7 @@
 WARN	= -pedantic -Wall -Wmissing-prototypes -Wmissing-declarations\
 	  -Wsign-compare
 OPT	= -O2 -funroll-loops
-CC      = gcc -I. -std=c89 $(OPT) $(WARN) -g
+CC      = gcc -I. -std=c89 $(OPT) $(WARN) -g -lm
 O_FILES = anim/sysanim.o \
 	  base/base.o \
 	  cdrom/cdrom.o \
