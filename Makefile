@@ -66,7 +66,7 @@ derclou: $(O_FILES)
 	$(CC) -o $@ */*.o `sdl-config --libs` -lm
 
 .c.o:
-	$(CC) `sdl-config --cflags` -lm -c -o $@ $<
+	$(CC) `sdl-config --cflags` -c -o $@ $<
 
 clean:
 	rm -f *~ *.o */*.o derclou

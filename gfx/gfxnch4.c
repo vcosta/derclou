@@ -15,11 +15,12 @@
 
 int ScrX, ScrY;
 
+static U8 ScrDark;
+
 void gfxSetDarkness(U8 value)
 {
     U8 *dp;
     int h, i;
-    static U8 ScrDark;
 
     dp = LSRPInMem.pixels;
 

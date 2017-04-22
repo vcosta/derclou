@@ -39,10 +39,7 @@ void DoneTaxi(void)
 
 	sprintf(name, "*%s", NODE_NAME(GetNthNode(film->loc_names, locNr)));
 
-	new =
-	    (struct ObjectNode *) CreateNode(locs,
-					     sizeof(struct ObjectNode),
-					     name);
+	new = (struct ObjectNode *) CreateNode(locs, sizeof(struct ObjectNode), name);
 	new->nr = locNr + 1;	/* because of ChoiceOk */
     }
 
@@ -55,13 +52,11 @@ void DoneTaxi(void)
 	i = j;
 
 	locNr = OL_NR(GetNthNode(locs, i)) - 1;
-	SceneArgs.ReturnValue =
-	    (U32) ((struct Scene *) GetLocScene(locNr)->EventNr);
+	SceneArgs.ReturnValue = (U32)GetLocScene(locNr)->EventNr;
     } else {
 	Say(BUSINESS_TXT, 0, MATT_PICTID, "LOVELY_TAXI");
 
-	SceneArgs.ReturnValue =
-	    (U32) ((struct Scene *) GetLocScene(GetOldLocation)->EventNr);
+	SceneArgs.ReturnValue = (U32)GetLocScene(GetOldLocation)->EventNr;
     }
 
     SceneArgs.Ueberschrieben = 1;

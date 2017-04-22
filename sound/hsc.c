@@ -405,7 +405,8 @@ static void hsc_process_row()
 #define HSC_BUFFER_SIZE		((unsigned)(SND_FREQUENCY / 18.2))
 
 /* Generic audio & audio mixing functions */
-S16 MusicStream[HSC_BUFFER_SIZE];
+static S16 MusicStream[HSC_BUFFER_SIZE];
+
 void hscMusicPlayer(unsigned len)
 {
     if (OPL_Ok) {
