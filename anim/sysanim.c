@@ -90,7 +90,7 @@ void LoadAnim(char *AnimID);
 void InitAnimHandler(void)
 {
     Handler.RunningAnimID = RunningAnimLine;
-    strcpy(Handler.RunningAnimID, "");
+    Handler.RunningAnimID[0] = '\0';
 }
 
 void CloseAnimHandler(void)
@@ -215,7 +215,7 @@ void PlayAnim(char *AnimID, U16 how_often, U32 mode)
 
 	    ContinueAnim();	/* in case anim has been suspended */
 	} else
-	    strcpy(Handler.RunningAnimID, "");
+	    Handler.RunningAnimID[0] = '\0';
     }
 }
 
@@ -225,7 +225,7 @@ void StopAnim(void)
     struct Picture *pict;
 
     if (Handler.RunningAnimID) {	/* anim currently playing */
-	if (strcmp(Handler.RunningAnimID, "") != 0) {
+	if (Handler.RunningAnimID[0] != '\0') {
 	    GetAnim(Handler.RunningAnimID, pict_list);
 
 	    /* "unprepare" pictures for the sake of completeness */
@@ -242,7 +242,7 @@ void StopAnim(void)
 				 txtGetKeyAsULONG((U16) ANIM_COLL_ID_POS,
 						  pict_list));
 
-	    strcpy(Handler.RunningAnimID, "");
+	    Handler.RunningAnimID[0] = '\0';
 	}
     }
 }
@@ -276,7 +276,7 @@ void animator(void)
     U16 destY = Handler.destY;
 
     if (!(Handler.AnimatorState & ANIM_STATE_SUSPENDED)) {
-	if ((Handler.RunningAnimID) && (strcmp(Handler.RunningAnimID, "")!=0)) {
+	if (Handler.RunningAnimID && Handler.RunningAnimID[0] != '\0') {
 	    if (Handler.RepeatationCount <= Handler.Repeatation) {
 		if ((--Handler.WaitCounter) == 0) {
 		    Handler.WaitCounter =
