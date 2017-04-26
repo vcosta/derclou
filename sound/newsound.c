@@ -5,7 +5,7 @@
   publiclicensecontract.doc files which should be contained with this
   distribution.
  ****************************************************************************/
-#include "SDL_mixer.h"
+#include "SDL.h"
 
 #include "disk/disk.h"
 

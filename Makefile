@@ -1,5 +1,4 @@
-WARN	= -pedantic -Wall -Wmissing-prototypes -Wmissing-declarations\
-	  -Wsign-compare
+WARN	= -pedantic -Wall -Wmissing-prototypes -Wmissing-declarations -Wsign-compare
 OPT	= -O2 -funroll-loops
 CC      = gcc -I. -std=c89 $(OPT) $(WARN) -g
 O_FILES = anim/sysanim.o \
@@ -63,10 +62,10 @@ O_FILES = anim/sysanim.o \
 
 
 derclou: $(O_FILES)
-	$(CC) -o $@ */*.o `sdl-config --libs` -lm
+	$(CC) -o $@ */*.o `sdl2-config --libs` -lm
 
 .c.o:
-	$(CC) `sdl-config --cflags` -c -o $@ $<
+	$(CC) `sdl2-config --cflags` -c -o $@ $<
 
 clean:
 	rm -f *~ *.o */*.o derclou

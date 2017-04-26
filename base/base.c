@@ -159,7 +159,6 @@ static bool tcInit(void)
     }
 
     gfxInit();
-    SDL_WM_SetCaption("Der Clou!", NULL);
 
     sndInit();
 
@@ -608,7 +607,7 @@ static void parseOptions(int argc, char *argv[])
     setup.CDRom         = false;
     setup.Debug         = 1;
     setup.CDAudio       = false;
-    setup.Scale         = GFX_SCALE_NORMAL;
+    setup.Scale         = 1;
 
     for (i = 1; i < argc; i++) {
         s = argv[i];
@@ -616,12 +615,8 @@ static void parseOptions(int argc, char *argv[])
         if (s[0] == '-') {
             switch (s[1]) {
             case 'g':
-                if (strcmp(s+2, "2x") == 0)
-                    setup.Scale = GFX_SCALE_2X;
-                else
-                if (strcmp(s+2, "linear2x") == 0)
-                    setup.Scale = GFX_SCALE_LINEAR2X;
-                else
+                setup.Scale = max(atoi(s+2), 1);
+		break;
 
             case 'd':
                 setup.Debug = max(atoi(s+2), 0);

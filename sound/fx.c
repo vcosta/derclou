@@ -25,17 +25,21 @@ static void LoadVOC(const char *fileName);
 static void sndCallBack(void *udata, Uint8 *stream, int len)
 {
     S16 *MixStream = (S16 *) stream;
+    const float sfxFactor = ((float)setup.SfxVolume) / SND_MAX_VOLUME,
+	    musicFactor = ((float)setup.MusicVolume) / SND_MAX_VOLUME;
     int sizeStream, i;
 
     if (MusicChannelOn) {
 	hscMusicPlayer(len);
     }
 
+    SDL_memset(stream, 0, len);
+
     sizeStream = len / sizeof(S16);
     for (i = 0; i < sizeStream; i++) {
-	S16 Sfx = 0, Music = 0;
-	float fSfx, fMusic, fMix;
+	S16 Sfx, Music;
 
+	Sfx = Music = 0;
 	if (SfxChannelOn) {
 	    sndRemoveBuffer(FXBase.pSfxBuffer, &Sfx, sizeof(Sfx));
 	}
@@ -43,12 +47,7 @@ static void sndCallBack(void *udata, Uint8 *stream, int len)
 	    sndRemoveBuffer(FXBase.pMusicBuffer, &Music, sizeof(Music));
 	}
 
-	fSfx = Sfx;
-	fMusic = Music;
-
-	fMix = (fSfx * setup.SfxVolume) / SND_MAX_VOLUME
-	    + (fMusic * setup.MusicVolume) / SND_MAX_VOLUME;
-	MixStream[i] = (fMix + 0.5f);	/* round */
+	MixStream[i] = sfxFactor*Sfx + musicFactor*Music + 0.5f;
     }
 }
 
@@ -147,7 +146,9 @@ static void LoadVOC(const char *fileName)
     U8 SR;
     unsigned sampleRate, compressionType;
 
-    pSoundFile = dskLoad(fileName);
+    if (!(pSoundFile = dskLoad(fileName))) {
+	return;
+    }
 
     /* parse VOC header */
     if (memcmp(pSoundFile, magicString, strlen(magicString)) != 0) {

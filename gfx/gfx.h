@@ -34,13 +34,6 @@
 #define GFX_PRINT_LEFT          (1<<2)
 #define GFX_PRINT_SHADOW        (1<<3)
 
-typedef enum {
-    GFX_SCALE_NORMAL,
-
-    GFX_SCALE_2X,
-    GFX_SCALE_LINEAR2X
-} GfxScaleE;
-
 /* defines for SetDrMd */
 
 typedef enum {

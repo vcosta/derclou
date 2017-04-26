@@ -27,6 +27,6 @@
 void *TCAllocMem(size_t size, bool clear);
 void TCFreeMem(void *ptr, size_t size);
 
-ssize_t memGetAllocatedMem(void);
+ptrdiff_t memGetAllocatedMem(void);
 
 #endif

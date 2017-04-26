@@ -22,7 +22,7 @@
 #define ERR_MEMORY_NO_MEM       1
 
 struct MemControl {
-    ssize_t allocated;
+    ptrdiff_t allocated;
 };
 
 static struct MemControl MemControl;
@@ -46,7 +46,7 @@ void *TCAllocMem(size_t size, bool clear)
     return p;
 }
 
-ssize_t memGetAllocatedMem(void)
+ptrdiff_t memGetAllocatedMem(void)
 {
     return MemControl.allocated;
 }

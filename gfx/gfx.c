@@ -27,8 +27,6 @@
 #include "gfx/gfx.h"
 #include "gfx/gfx.ph"
 
-U16 ScaleFactor;
-
 struct _GC {
     Rect clip;
 
@@ -47,16 +45,16 @@ struct _GC {
     Font *font;
 };
 
-U32 Rmask, Rshift;
-U32 Gmask, Gshift;
-U32 Bmask, Bshift;
-
 void gfxILBMToRAW(const U8 *src, U8 *dst, size_t size);
 
 void gfxRealRefreshArea(U16 x, U16 y, U16 w, U16 h);
 
-SDL_Surface *HWScreen;
-SDL_Surface *TMPScreen;
+SDL_Surface *Screen;
+SDL_Surface *windowSurface;
+
+SDL_Window *sdlWindow;
+SDL_Renderer *sdlRenderer;
+SDL_Texture *sdlTexture;
 
 /********************************************************************
  * inits & dons
@@ -65,48 +63,38 @@ SDL_Surface *TMPScreen;
 void gfxInit(void)
 {
     Uint32 flags;
+    int sw, sh;
 
     SDL_InitSubSystem(SDL_INIT_VIDEO);
 
-    flags = SDL_SWSURFACE;
+    flags = SDL_WINDOW_OPENGL;
 
-    if (setup.FullScreen)
-        flags |= SDL_FULLSCREEN;
+    if (setup.FullScreen) {
+        flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 
-    if (setup.Scale == GFX_SCALE_NORMAL) {
-        ScaleFactor = 1;
+	sw = sh = 0;
     } else {
-        ScaleFactor = 2;
+	sw = SCREEN_WIDTH*setup.Scale;
+	sh = SCREEN_HEIGHT*setup.Scale;
     }
 
-    if (ScaleFactor == 1) {
-        Screen =
-            SDL_SetVideoMode(SCREEN_WIDTH,
-                             SCREEN_HEIGHT, 8, flags);
-    } else {
-        SDL_PixelFormat *fmt;
+    sdlWindow = SDL_CreateWindow("Der Clou!",
+	    SDL_WINDOWPOS_UNDEFINED,
+	    SDL_WINDOWPOS_UNDEFINED,
+	    sw, sh,
+	    flags);
+    sdlRenderer = SDL_CreateRenderer(sdlWindow, -1, 0);
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+    SDL_RenderSetLogicalSize(sdlRenderer, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        Screen =
-            SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH,
-                                 SCREEN_HEIGHT, 8, 0, 0, 0, 0);
-        TMPScreen =
-            SDL_CreateRGBSurface(SDL_SWSURFACE, SCREEN_WIDTH+1,
-                                 SCREEN_HEIGHT+1, 32, 0, 0, 0, 0);
-        HWScreen =
-            SDL_SetVideoMode(SCREEN_WIDTH  * ScaleFactor,
-                             SCREEN_HEIGHT * ScaleFactor, 32, flags);
+    windowSurface = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT,
+	    24, 0, 0, 0, 0);
+    sdlTexture = SDL_CreateTexture(sdlRenderer,
+	    SDL_PIXELFORMAT_RGB888, SDL_TEXTUREACCESS_STREAMING,
+	    SCREEN_WIDTH, SCREEN_HEIGHT);
 
-        fmt = TMPScreen->format;
-
-        Rmask   = fmt->Rmask;
-        Rshift  = fmt->Rshift;
-
-        Gmask   = fmt->Gmask;
-        Gshift  = fmt->Gshift;
-
-        Bmask   = fmt->Bmask;
-        Bshift  = fmt->Bshift;
-    }
+    Screen = SDL_CreateRGBSurface(0, SCREEN_WIDTH, SCREEN_HEIGHT,
+	    8, 0, 0, 0, 0);
 
     gfxSetGC(NULL);
 
@@ -427,9 +415,7 @@ static Font *gfxOpenFont(char *fileName, U16 w, U16 h,
     U8 *lbm;
 
     SDL_Surface *bmp;
-    Uint8 *pixels;
     U32 size;
-    size_t i;
 
 
     /* create font structure. */
@@ -446,25 +432,20 @@ static Font *gfxOpenFont(char *fileName, U16 w, U16 h,
     lbm = dskLoad(path);
 
 
-    bmp = SDL_CreateRGBSurface(SDL_SWSURFACE, sw, sh, 8, 0, 0, 0, 0);
+    bmp = SDL_CreateRGBSurface(0, sw, sh, 8, 0, 0, 0, 0);
     size = sw * sh;
 
     if (SDL_MUSTLOCK(bmp))
 	SDL_LockSurface(bmp);
 
     gfxILBMToRAW(lbm, bmp->pixels, size);
-    free(lbm);
-
-    for (i=0, pixels=bmp->pixels; i<size; i++, pixels++) {
-        if (*pixels != 0) {
-            *pixels = 1;
-        }
-    }
 
     if (SDL_MUSTLOCK(bmp))
 	SDL_UnlockSurface(bmp);
 
-    SDL_SetColorKey(bmp, SDL_SRCCOLORKEY, 0);
+    free(lbm);
+
+    SDL_SetColorKey(bmp, SDL_TRUE, 0);
     font->bmp = bmp;
 
     return font;
@@ -597,11 +578,8 @@ void gfxRectFill(GC *gc, U16 sx, U16 sy, U16 ex, U16 ey)
 	ey = tmp;
     }
 
-    dst.x = gc->clip.x;
-    dst.y = gc->clip.y;
-
-    dst.x += sx;
-    dst.y += sy;
+    dst.x = gc->clip.x + sx;
+    dst.y = gc->clip.y + sy;
     dst.w = ex - sx + 1;
     dst.h = ey - sy + 1;
 
@@ -610,16 +588,8 @@ void gfxRectFill(GC *gc, U16 sx, U16 sy, U16 ex, U16 ey)
     dst2 = dst;
     dst2.x++;
     dst2.y++;
-
-    if (dst2.w > 2)
-	dst2.w -= 2;
-    else
-	dst2.w = 0;
-
-    if (dst2.h > 2)
-	dst2.h -= 2;
-    else
-	dst2.h = 0;
+    dst2.w -= 2;
+    dst2.h -= 2;
 
     SDL_FillRect(Screen, &dst2, gc->foreground);
 
@@ -1062,7 +1032,7 @@ void gfxSetRGB(GC *gc, U8 color, U8 r, U8 g, U8 b)
     colors[0].g = g;
     colors[0].b = b;
 
-    SDL_SetColors(Screen, colors, color, 1);
+    SDL_SetPaletteColors(Screen->format->palette, colors, color, 1);
 
     gfxRealRefreshArea(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 }
@@ -1137,7 +1107,7 @@ void gfxChangeColors(GC *gc, U32 delay, U32 mode, U8 *palette)
                 colors[t].g = 16 + (((S32)cols[t*3+1] - 16) * (fakt * s)) / 128;
                 colors[t].b = 12 + (((S32)cols[t*3+2] - 12) * (fakt * s)) / 128;
             }
-            SDL_SetColors(Screen, &colors[st], st, en - st + 1);
+            SDL_SetPaletteColors(Screen->format->palette, &colors[st], st, en - st + 1);
         }
 
 	for (t=st; t<=en; t++) {
@@ -1145,7 +1115,7 @@ void gfxChangeColors(GC *gc, U32 delay, U32 mode, U8 *palette)
 	    colors[t].g = 0;
 	    colors[t].b = 0;
         }
-	SDL_SetColors(Screen, &colors[st], st, en - st + 1);
+	SDL_SetPaletteColors(Screen->format->palette, &colors[st], st, en - st + 1);
 	break;
 
     case GFX_BLEND_UP:
@@ -1160,7 +1130,7 @@ void gfxChangeColors(GC *gc, U32 delay, U32 mode, U8 *palette)
 	    colors[t].g = 0;
 	    colors[t].b = 0;
         }
-	SDL_SetColors(Screen, &colors[st], st, en - st + 1);
+	SDL_SetPaletteColors(Screen->format->palette, &colors[st], st, en - st + 1);
 
         for (s=0; s<=time; s++) {
             gfxRealRefreshArea(area.x, area.y, area.w, area.h);
@@ -1171,7 +1141,7 @@ void gfxChangeColors(GC *gc, U32 delay, U32 mode, U8 *palette)
                 colors[t].g = 16 + (((S32)cols[t*3+1] - 16) * (fakt * s)) / 128;
                 colors[t].b = 12 + (((S32)cols[t*3+2] - 12) * (fakt * s)) / 128;
             }
-            SDL_SetColors(Screen, &colors[st], st, en - st + 1);
+            SDL_SetPaletteColors(Screen->format->palette, &colors[st], st, en - st + 1);
         }
 
         gfxRealRefreshArea(area.x, area.y, area.w, area.h);
@@ -1182,7 +1152,7 @@ void gfxChangeColors(GC *gc, U32 delay, U32 mode, U8 *palette)
 	    colors[t].g = palette[t*3+1];
 	    colors[t].b = palette[t*3+2];
         }
-	SDL_SetColors(Screen, &colors[st], st, en - st + 1);
+	SDL_SetPaletteColors(Screen->format->palette, &colors[st], st, en - st + 1);
 	break;
     }
 
@@ -1830,9 +1800,6 @@ void gfxBlit(GC *gc, MemRastPort *src, U16 sx, U16 sy, U16 dx, U16 dy,
 
     dst = Screen;
 
-    if (SDL_MUSTLOCK(dst))
-        SDL_LockSurface(dst);
-
     dp = dst->pixels;
     sp = src->pixels;
 
@@ -1842,109 +1809,41 @@ void gfxBlit(GC *gc, MemRastPort *src, U16 sx, U16 sy, U16 dx, U16 dy,
     w = areaR.w;
     h = areaR.h;
 
+    if (SDL_MUSTLOCK(dst))
+	SDL_LockSurface(dst);
+
     if (has_mask) {
-        for (y=0; y<h; y++) {
-            for (x=0; x<w; x++) {
-                if (sp[x] != 0) {
-                    dp[x] = sp[x];
-                }
-            }
-            dp += SCREEN_WIDTH;
-            sp += src->w;
-        }
+	for (y=0; y<h; y++) {
+	    for (x=0; x<w; x++) {
+		if (sp[x] != 0) {
+		    dp[x] = sp[x];
+		}
+	    }
+	    dp += SCREEN_WIDTH;
+	    sp += src->w;
+	}
     } else {
-        for (y=0; y<h; y++) {
-            memcpy(dp, sp, w);
-            dp += SCREEN_WIDTH;
-            sp += src->w;
-        }
+	for (y=0; y<h; y++) {
+	    memcpy(dp, sp, w);
+	    dp += SCREEN_WIDTH;
+	    sp += src->w;
+	}
     }
 
     if (SDL_MUSTLOCK(dst))
-        SDL_UnlockSurface(dst);
+	SDL_UnlockSurface(dst);
 
     gfxRefreshArea(areaR.x, areaR.y, areaR.w, areaR.h);
 }
 
 static int screen_freeze_count = 0;
 
-static void Normal2x(U32 *sp, size_t sw, U32 *dp, size_t dw, U16 w, U16 h)
-{
-    U32 *r;
-    size_t i;
-
-    while (h--) {
-        r = dp;
-        for (i=0; i<w; i++, r += 2) {
-            U32 color = sp[i];
-
-            r[0] = color;
-            r[1] = color;
-            r[0+dw] = color;
-            r[1+dw] = color;
-        }
-        sp += sw;
-        dp += dw*2;
-    }
-}
-
-#define GetR(v) ((((v) & Rmask) >> Rshift))
-#define GetG(v) ((((v) & Gmask) >> Gshift))
-#define GetB(v) ((((v) & Bmask) >> Bshift))
-
-static U32 INTERPOLATE(U32 A, U32 B)
-{
-    U32 r, g, b;
-
-    r = (GetR(A) + GetR(B))/2;
-    g = (GetG(A) + GetG(B))/2;
-    b = (GetB(A) + GetB(B))/2;
-
-    return ((r << Rshift) | (g << Gshift) | (b << Bshift));
-}
-
-static void Bilinear2x(U32 *sp, size_t sw, U32 *dp, size_t dw, U16 w, U16 h)
-{
-    U32 *Sp, *Dp;
-    size_t x, y;
-
-    Sp = sp;
-    Dp = dp;
-
-    for (y=0u; y<h; y++) {
-        for (x=0u; x<w; x++) {
-            dp[x*2+0] = sp[x+0];
-            dp[x*2+1] = INTERPOLATE(sp[x+0], sp[x+1]);
-        }
-        
-        sp += sw;
-        dp += dw*2u;
-    }
-
-    sp = Sp;
-    dp = Dp;
-
-    for (y=0u; y<h; y++) {
-        dp += dw;
-
-        for (x=0u; x<w*2u; x++) {
-            dp[x+0] = INTERPOLATE(dp[x+0-dw], dp[x+0+dw]);
-            dp[x+1] = INTERPOLATE(dp[x+1-dw], dp[x+1+dw]);
-        }
-
-        dp += dw;
-    }
-}
-
-
 /* ZZZ */
 void gfxRealRefreshArea(U16 x, U16 y, U16 w, U16 h)
 {
     Rectangle areaR, areaR2;
-    SDL_Rect srcR, dstR;
-    SDL_Surface *src, *dst;
-    size_t sw, dw;
-    U32 *sp, *dp;
+    void *pixels;
+    int pitch;
 
     areaR.x = 0;
     areaR.y = 0;
@@ -1962,58 +1861,18 @@ void gfxRealRefreshArea(U16 x, U16 y, U16 w, U16 h)
     w = areaR.w;
     h = areaR.h;
 
-    srcR.x = x;
-    srcR.y = y;
-    srcR.w = w;
-    srcR.h = h;
-    SDL_UpdateRects(Screen, 1, &srcR);
+    SDL_BlitSurface(Screen, NULL, windowSurface, NULL);
 
-    if (setup.Scale == GFX_SCALE_NORMAL) {
-        return;
-    }
+    SDL_LockTexture(sdlTexture, NULL, &pixels, &pitch);
+    SDL_ConvertPixels(windowSurface->w, windowSurface->h,
+	    windowSurface->format->format,
+	    windowSurface->pixels, windowSurface->pitch,
+	    SDL_PIXELFORMAT_RGB888,
+	    pixels, pitch);
+    SDL_UnlockTexture(sdlTexture);
 
-    dstR = srcR;
-    dstR.x++;
-    dstR.y++;
-    SDL_BlitSurface(Screen, &srcR, TMPScreen, &dstR);
-    SDL_UpdateRects(TMPScreen, 1, &dstR);
-
-    src = TMPScreen;
-    dst = HWScreen;
-
-    if (SDL_MUSTLOCK(src))
-        SDL_LockSurface(src);
-    if (SDL_MUSTLOCK(dst))
-        SDL_LockSurface(dst);
-
-    sw = src->w;
-    dw = dst->w;
-
-    sp  = src->pixels;
-    sp += sw*(y+1) + x+1;
-    dp  = dst->pixels;
-    dp += dw*y*ScaleFactor + x*ScaleFactor;
-
-    switch (setup.Scale) {
-    case GFX_SCALE_2X:
-        Normal2x(sp, sw, dp, dw, w, h);
-        break;
-
-    case GFX_SCALE_LINEAR2X:
-        Bilinear2x(sp, sw, dp, dw, w, h);
-        break;
-
-    default:
-        break;
-    }
-
-    if (SDL_MUSTLOCK(src))
-        SDL_UnlockSurface(src);
-    if (SDL_MUSTLOCK(dst))
-        SDL_UnlockSurface(dst);
-
-    SDL_UpdateRect(HWScreen, x*ScaleFactor, y*ScaleFactor,
-        w*ScaleFactor, h*ScaleFactor);
+    SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
+    SDL_RenderPresent(sdlRenderer);
 }
 
 
@@ -2156,7 +2015,7 @@ void gfxGetMouseXY(GC *gc, U16 *pMouseX, U16 *pMouseY)
     SDL_GetMouseState(&MouseX, &MouseY);
 
     if (pMouseX) {
-	MouseX /= ScaleFactor;
+	MouseX /= setup.Scale;
 	if (MouseX < gc->clip.x)
 	    MouseX = 0;
 	else
@@ -2165,7 +2024,7 @@ void gfxGetMouseXY(GC *gc, U16 *pMouseX, U16 *pMouseY)
     }
 
     if (pMouseY) {
-	MouseY /= ScaleFactor;
+	MouseY /= setup.Scale;
 	if (MouseY < gc->clip.y)
 	    MouseY = 0;
 	else
