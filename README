@@ -1,4 +1,4 @@
-Der Clou! - SDL Port v2.6
+Der Clou! - SDL Port v2.7
 =========================
 
 Original version by:
@@ -24,7 +24,7 @@ Please read the LICENSE file in this directory before proceeding.
 
 To compile:
 ===========
-You need SDL installed. Type 'make' to compile.
+You need SDL 2.0 installed. Type 'make' to compile.
 
 
 Instructions:
@@ -40,7 +40,7 @@ Syntax:
 Flags:
         -d[<num>]  - enable debug output (debug level [1])
         -f         - fullscreen mode
-        -g<mode>   - graphics mode (normal,2x,linear2x)
+        -g<num>    - graphics zoom factor (1,2,4)
         -h         - show help
         -m<num>    - set music volume to <num> (0-255)
         -s<num>    - set sfx volume to <num> (0-255)
@@ -66,11 +66,9 @@ Implementation:
   the environment variable 'DERCLOU_ROOTDIR'.
   Failing that it will try to load them from the current directory.
 
-  ('DERCLOU_ROOTDIR' seems busted. Please use the current directory for now.)
-
   The free datafiles (German) can no longer be downloaded from the neo website.
   The website has been down for some time. I put these files in a tarball here:
-  http://web.ist.utl.pt/vasco.costa/theclue/
+  https://sites.google.com/site/vascocosta/theclue
 
   Just 'cd' into the created directory and run 'derclou' to play.
 
