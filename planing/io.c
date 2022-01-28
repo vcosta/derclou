@@ -183,7 +183,10 @@ ubyte plOpen(U32 objId, ubyte mode, FILE ** fh)
 		    sprintf(name2, "%s%d%s", name1, i + 1,
 			    PLANING_PLAN_EXTENSION);
 
-		    dskBuildPathName(DISK_CHECK_FILE, DATADISK, name2, pllPath2);
+		    if(!dskBuildPathName(DISK_CHECK_FILE, DATADISK, name2, pllPath2)) {
+		        /* allow for uninitialized (non-existent) save files. */
+		        dskBuildPathName(DISK_CHECK_DIR, DATADISK, name2, pllPath2);
+		    }
 
 		    *fh = dskOpen(pllPath2, Planing_Open[mode]);
 
